@@ -42,7 +42,7 @@
                     </svg>
                 </div>
                 <p class="dropzone-title">Drag and drop Word documents here</p>
-                <p class="dropzone-sub">Supports <strong>.doc</strong> and <strong>.docx</strong> files</p>
+                <p class="dropzone-sub">Supports <strong>.doc</strong>, <strong>.docx</strong>, <strong>.rtf</strong>, and <strong>.html</strong> files</p>
                 <div class="dropzone-divider">OR</div>
                 <button type="button" class="btn-primary-action" id="wpBrowseBtn">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -52,7 +52,7 @@
                 </button>
                 <asp:FileUpload ID="fuWordFiles" runat="server" AllowMultiple="true"
                     CssClass="d-none" ClientIDMode="Static"
-                    accept=".doc,.docx" />
+                    accept=".doc,.docx,.rtf,.htm,.html" />
             </div>
 
             <div id="wpAlertHost" runat="server"></div>
@@ -94,7 +94,7 @@
                     </svg>
                 </div>
                 <p class="dropzone-title">Drag and drop Word/PDF files here</p>
-                <p class="dropzone-sub">Supports <strong>.doc</strong>, <strong>.docx</strong>, and <strong>.pdf</strong> files</p>
+                <p class="dropzone-sub">Supports <strong>.doc</strong>, <strong>.docx</strong>, <strong>.rtf</strong>, <strong>.html</strong>, and <strong>.pdf</strong> files</p>
                 <div class="dropzone-divider">OR</div>
                 <button type="button" class="btn-primary-action" id="mpBrowseBtn">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -104,7 +104,7 @@
                 </button>
                 <asp:FileUpload ID="fuMergeFiles" runat="server" AllowMultiple="true"
                     CssClass="d-none" ClientIDMode="Static"
-                    accept=".doc,.docx,.pdf" />
+                    accept=".doc,.docx,.rtf,.htm,.html,.pdf" />
             </div>
 
             <div id="mpAlertHost" runat="server"></div>
@@ -238,7 +238,7 @@
             var wpFilesSection = document.getElementById('wpFilesSection');
             var wpAlertHost = document.getElementById('<%= wpAlertHost.ClientID %>');
             var wpConvertBtn = document.getElementById('btnConvertWordToPdf');
-            var wpValidExts = ['.doc', '.docx'];
+            var wpValidExts = ['.doc', '.docx', '.rtf', '.htm', '.html'];
 
             function isValidWpExt(name) {
                 name = name.toLowerCase();
@@ -306,7 +306,7 @@
                 syncFileInput(wpInput, wpFiles);
                 clearAlert(wpAlertHost);
                 if (invalid.length) {
-                    showAlert(wpAlertHost, 'Unsupported file format: ' + invalid.join(', ') + '. Please upload only .doc or .docx files.', 'danger');
+                    showAlert(wpAlertHost, 'Unsupported file format: ' + invalid.join(', ') + '. Please upload only .doc, .docx, .rtf, or .html files.', 'danger');
                 }
                 renderWpFiles();
             }
@@ -353,7 +353,7 @@
             var mpMergeBtn = document.getElementById('btnMergeToPdf');
             var mpMergeHint = document.getElementById('mpMergeHint');
             var mpOrder = document.getElementById('hfMergeOrder');
-            var mpValidExts = ['.doc', '.docx', '.pdf'];
+            var mpValidExts = ['.doc', '.docx', '.rtf', '.htm', '.html', '.pdf'];
 
             function isValidMpExt(name) {
                 name = name.toLowerCase();
@@ -505,7 +505,7 @@
                 syncFileInput(mpInput, mpFiles);
                 clearAlert(mpAlertHost);
                 if (invalid.length) {
-                    showAlert(mpAlertHost, 'Unsupported file format: ' + invalid.join(', ') + '. Please upload only .doc, .docx, or .pdf files.', 'danger');
+                    showAlert(mpAlertHost, 'Unsupported file format: ' + invalid.join(', ') + '. Please upload only .doc, .docx, .rtf, .html, or .pdf files.', 'danger');
                 }
                 renderMpFiles();
             }

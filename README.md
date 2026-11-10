@@ -1,6 +1,6 @@
 # Word to PDF Converter and Merger
 
-An ASP.NET Web Forms sample application demonstrating how to convert Word documents (.doc, .docx) to PDF and merge multiple Word and PDF files into a single unified PDF document using **Syncfusion DocIO**, **DocToPDFConverter**, and **PDF** libraries.
+An ASP.NET Web Forms sample application demonstrating how to convert Word documents (.doc, .docx ,.rtf, .htm, .html) to PDF and merge multiple Word and PDF files into a single unified PDF document using **Syncfusion DocIO**, **DocToPDFConverter**, and **PDF** libraries.
 
 ---
 
@@ -9,13 +9,13 @@ An ASP.NET Web Forms sample application demonstrating how to convert Word docume
 This sample provides an intuitive web interface for common document processing workflows:
 
 1. **Word to PDF Conversion**:
-   - Convert single or multiple Microsoft Word documents (`.doc` and `.docx`) to PDF format.
+   - Convert single or multiple Microsoft  documents (.doc, .docx ,.rtf, .htm, .html) to PDF format.
    - Preserves text formatting, images, tables, shapes, and layout elements.
    - Single file conversion downloads directly as a `.pdf` file.
    - Batch conversion packages all converted PDFs into a single `.zip` archive.
 
 2. **Merge to PDF**:
-   - Combine multiple Word (`.doc`, `.docx`) and PDF (`.pdf`) documents into a single consolidated PDF.
+   - Combine multiple documents (.doc, .docx ,.rtf, .htm, .html) and PDF (`.pdf`) documents into a single consolidated PDF.
    - Automatically converts uploaded Word files to PDF in memory before appending them.
    - Supports reordering files using drag-and-drop or order controls prior to merging.
 

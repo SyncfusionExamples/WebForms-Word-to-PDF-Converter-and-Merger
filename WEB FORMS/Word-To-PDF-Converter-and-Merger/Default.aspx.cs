@@ -19,7 +19,7 @@ namespace Word_To_PDF_Converter_and_Merger
         {
         }
 
-        // ============== FEATURE 1: WORD TO PDF ==============
+        // ============== FEATURE 1: DOCUMENT TO PDF ==============
         protected void btnConvertWordToPdf_Click(object sender, EventArgs e)
         {
             try
@@ -27,17 +27,17 @@ namespace Word_To_PDF_Converter_and_Merger
                 var posted = CollectPostedFiles(fuWordFiles);
                 if (posted.Count == 0)
                 {
-                    ShowError("word", "Please add at least one Word document before converting.");
+                    ShowError("word", "Please add at least one document before converting.");
                     return;
                 }
 
                 var wordFiles = posted
-                    .Where(f => IsWordExtension(Path.GetExtension(f.FileName)))
+                    .Where(f => IsSupportedDocumentExtension(Path.GetExtension(f.FileName)))
                     .ToList();
 
                 if (wordFiles.Count == 0)
                 {
-                    ShowError("word", "No valid Word documents found. Please upload .doc or .docx files.");
+                    ShowError("word", "No valid documents found. Please upload .doc, .docx, .rtf, or .html files.");
                     return;
                 }
 
@@ -99,12 +99,28 @@ namespace Word_To_PDF_Converter_and_Merger
             }
         }
 
-        private static byte[] ConvertWordToPdfBytes(Stream inputStream, string fileName)
+        private static FormatType GetFormatTypeFromExtension(string fileName)
         {
             string ext = Path.GetExtension(fileName);
-            FormatType ft = string.Equals(ext, ".doc", StringComparison.OrdinalIgnoreCase)
-                ? FormatType.Doc
-                : FormatType.Docx;
+            if (string.IsNullOrEmpty(ext)) return FormatType.Docx;
+            switch (ext.ToLowerInvariant())
+            {
+                case ".doc":
+                    return FormatType.Doc;
+                case ".rtf":
+                    return FormatType.Rtf;
+                case ".htm":
+                case ".html":
+                    return FormatType.Html;
+                case ".docx":
+                default:
+                    return FormatType.Docx;
+            }
+        }
+
+        private static byte[] ConvertWordToPdfBytes(Stream inputStream, string fileName)
+        {
+            FormatType ft = GetFormatTypeFromExtension(fileName);
             using (var wordDoc = new WordDocument(inputStream, ft))
             using (var converter = new DocToPDFConverter())
             using (var pdfDoc = converter.ConvertToPDF(wordDoc))
@@ -131,13 +147,13 @@ namespace Word_To_PDF_Converter_and_Merger
                 var orderedFiles = OrderByClient(posted, hfMergeOrder.Value);
 
                 var validFiles = orderedFiles
-                    .Where(f => IsWordExtension(Path.GetExtension(f.FileName)) ||
+                    .Where(f => IsSupportedDocumentExtension(Path.GetExtension(f.FileName)) ||
                                 string.Equals(Path.GetExtension(f.FileName), ".pdf", StringComparison.OrdinalIgnoreCase))
                     .ToList();
 
                 if (validFiles.Count < 2)
                 {
-                    ShowError("merge", "Please upload at least two valid Word or PDF files.");
+                    ShowError("merge", "Please upload at least two valid document or PDF files.");
                     return;
                 }
 
@@ -202,9 +218,7 @@ namespace Word_To_PDF_Converter_and_Merger
             var ms = new MemoryStream();
             file.InputStream.CopyTo(ms);
             ms.Position = 0;
-            FormatType ft = string.Equals(ext, ".doc", StringComparison.OrdinalIgnoreCase)
-                ? FormatType.Doc
-                : FormatType.Docx;
+            FormatType ft = GetFormatTypeFromExtension(fileName);
             using (var wordDoc = new WordDocument(ms, ft))
             using (var converter = new DocToPDFConverter())
             using (var pdfDoc = converter.ConvertToPDF(wordDoc))
@@ -233,11 +247,16 @@ namespace Word_To_PDF_Converter_and_Merger
             return list;
         }
 
-        private static bool IsWordExtension(string ext)
+        private static bool IsSupportedDocumentExtension(string ext)
         {
             if (string.IsNullOrEmpty(ext)) return false;
             ext = ext.ToLowerInvariant();
-            return ext == ".doc" || ext == ".docx";
+            return ext == ".doc" || ext == ".docx" || ext == ".rtf" || ext == ".htm" || ext == ".html";
+        }
+
+        private static bool IsWordExtension(string ext)
+        {
+            return IsSupportedDocumentExtension(ext);
         }
 
         private static List<HttpPostedFile> OrderByClient(List<HttpPostedFile> files, string orderList)
