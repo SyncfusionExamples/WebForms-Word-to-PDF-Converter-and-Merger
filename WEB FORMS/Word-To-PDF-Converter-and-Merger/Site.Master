@@ -6,7 +6,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <base href="/Word-To-PDF-Converter-and-Merger/" />
+    <base href="/word-to-pdf-converter-and-merger/" />
     <title><%: Page.Title %> - Word to PDF Converter and Merger</title>
 
     <asp:PlaceHolder runat="server">
